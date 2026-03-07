@@ -1,0 +1,53 @@
+#Backend API
+fastapi
+uvicorn[standard]
+
+#LangChain / RAG
+langchain
+langchain-community
+langchain-core
+langchain-text-splitters
+
+#AI / Embeddings
+sentence-transformers
+transformers
+torch
+accelerate
+
+#Document Processing
+pypdf
+pymupdf
+reportlab
+
+#OCR
+easyocr
+opencv-python
+
+#Vector Database
+pinecone-client
+faiss-cpu
+
+#LLM API
+groq
+
+python-multipart
+python-dotenv
+
+#Database
+sqlalchemy
+psycopg2-binary
+
+#Utilities
+tqdm
+numpy
+pandas
+
+pydantic
+requests
+
+scikit-learn
+
+#Prototype UI
+streamlit
+
+
