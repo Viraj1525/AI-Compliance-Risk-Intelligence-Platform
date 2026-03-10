@@ -1,6 +1,8 @@
+﻿import os
+
 from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import simpleSplit
 from reportlab.pdfgen import canvas
-import os
 
 
 def generate_report(analysis, score):
@@ -11,16 +13,31 @@ def generate_report(analysis, score):
 
     c = canvas.Canvas(file_path, pagesize=letter)
 
-    c.drawString(100, 750, "AI Compliance Audit Report")
-    c.drawString(100, 720, f"Compliance Score: {score}/100")
+    c.setTitle("AI Compliance Audit Report")
 
-    y = 680
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(72, 750, "AI Compliance Audit Report")
 
-    lines = analysis.split("\n")
+    c.setFont("Helvetica", 11)
+    c.drawString(72, 730, f"Compliance Score: {score}/100")
+
+    y = 700
+
+    lines = analysis.split("\n") if analysis else ["No findings generated."]
 
     for line in lines:
-        c.drawString(100, y, line)
-        y -= 20
+        text_line = line.strip() or " "
+        wrapped_lines = simpleSplit(text_line, "Helvetica", 10, 460)
+
+        for wrapped in wrapped_lines:
+            if y < 60:
+                c.showPage()
+                c.setFont("Helvetica", 10)
+                y = 750
+
+            c.setFont("Helvetica", 10)
+            c.drawString(72, y, wrapped)
+            y -= 16
 
     c.save()
 

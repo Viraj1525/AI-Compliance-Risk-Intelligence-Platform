@@ -1,309 +1,155 @@
-# 🚀 AI Compliance & Risk Intelligence Platform
+# AI Compliance and Risk Intelligence Platform
 
-An **AI-powered enterprise compliance analysis platform** that automatically analyzes company documents, contracts, and policies to detect **regulatory risks, security issues, and compliance violations** using **Retrieval-Augmented Generation (RAG)**.
+An AI-assisted platform for analyzing enterprise PDF documents for compliance and security risks.
 
-This platform allows organizations to **upload internal documents and interact with them through an AI assistant**, generating compliance insights and automated audit reports.
+The app combines:
+- A FastAPI backend for document ingestion, retrieval, risk analysis, chat, and report generation
+- A React + Vite frontend dashboard for upload, analysis, chat, and reporting
+- A local RAG pipeline using sentence-transformer embeddings and FAISS
 
----
+## Current capabilities
 
-# ✨ Features
+- Upload PDF documents (`/upload-document`)
+- Build and persist local vector index (`embeddings/faiss_index.bin` + `embeddings/chunks.pkl`)
+- Run compliance/risk analysis (`/analyze-risk`)
+- Ask contextual questions over uploaded docs (`/chat`)
+- Generate PDF compliance reports (`/generate-report`)
+- List and delete indexed documents (`GET/DELETE /documents`)
 
-## 📄 Document Upload & Processing
-- Upload enterprise documents (PDFs, contracts, policies)
-- Automatic **text extraction and chunking**
-- Document **embedding and indexing**
+## Tech stack
 
----
+- Backend: Python, FastAPI, Uvicorn
+- AI/RAG: LangChain utilities, sentence-transformers, FAISS
+- LLM provider: Groq (with heuristic fallback when API key/client is unavailable)
+- Frontend: React 19, Vite 7, Axios, Tailwind 4
 
-## 🧠 AI Compliance Risk Detection
+## Project structure
 
-The system detects:
-
-- 🔒 Data privacy violations  
-- ⚠️ Missing compliance clauses  
-- 🛡️ Security policy weaknesses  
-- 📜 Regulatory risks  
-
-Example output:
-
-```
-Risk Detected: GDPR Compliance Issue
-Section: Data Storage Policy
-Severity: High
-Issue: No defined data retention policy
-Recommendation: Add a retention clause
-```
-
----
-
-## 🔎 Multi-Document AI Search (RAG)
-
-The platform uses **Retrieval-Augmented Generation** to analyze multiple documents.
-
-Pipeline:
-
-```
-Document Upload
-      ↓
-Text Extraction
-      ↓
-Chunking
-      ↓
-Embeddings
-      ↓
-FAISS Vector Database
-      ↓
-Retriever
-      ↓
-LLM Analysis
+```text
+AI-Compliance-Risk-Intelligence-Platform/
+|-- backend/
+|   |-- app.py
+|   |-- routes/
+|   |-- services/
+|   |-- rag_pipeline/
+|   |-- risk_engine/
+|   |-- config/
+|   `-- data/documents/
+|-- frontend/
+|   |-- src/
+|   `-- package.json
+|-- requirements.txt
+`-- README.md
 ```
 
----
+## Prerequisites
 
-## 📊 Compliance Scoring
+- Python 3.10+
+- Node.js 18+
+- npm
 
-The system generates an overall **Compliance Score**.
+## Environment setup
 
-Example:
+1. Create a `.env` file in the repository root:
 
-```
-Compliance Score: 78 / 100
-
-High Risk Issues: 2
-Medium Risk Issues: 3
-Low Risk Issues: 1
+```env
+GROQ_API_KEY=your_groq_api_key
 ```
 
----
-
-## 💬 AI Chat with Enterprise Documents
-
-Users can interact with documents using natural language.
-
-Example queries:
-
-```
-"What compliance risks exist in this contract?"
-"Does this policy comply with GDPR?"
-"Summarize the security risks in this document."
-```
-
----
-
-## 📑 Automated Compliance Reports
-
-Generate structured **AI compliance audit reports**.
-
-Example:
-
-```
-AI Compliance Audit Report
-
-Document: security_policy.pdf
-
-High Risk:
-- Missing encryption standards
-
-Medium Risk:
-- Weak password policy
-
-Recommendations:
-- Implement encryption protocols
-- Strengthen password requirements
-```
-
----
-
-# 🏗 System Architecture
-
-```
-Frontend (React Dashboard)
-        ↓
-FastAPI Backend
-        ↓
-Document Processing Pipeline
-        ↓
-Embedding Model
-        ↓
-FAISS Vector Database
-        ↓
-Retriever
-        ↓
-LLM (Groq)
-        ↓
-Risk Detection Engine
-        ↓
-Compliance Score + Reports
-```
-
----
-
-# 🛠 Tech Stack
-
-### Backend
-- 🐍 Python
-- ⚡ FastAPI
-- 🔗 LangChain
-- 🤗 HuggingFace Transformers
-- 📚 FAISS Vector Database
-- 🧠 Groq LLM API
-
-### AI / NLP
-- Retrieval-Augmented Generation (RAG)
-- Sentence Transformers
-- Semantic Search
-
-### Frontend (Planned)
-- ⚛️ React (Vite)
-- 🎨 TailwindCSS
-- 🔌 Axios
-
-### Deployment (Planned)
-- 🐳 Docker
-- ☁️ AWS / GCP
-
----
-
-# 📂 Project Structure
-
-```
-AI-Compliance-Risk-Intelligence-Platform
-│
-├── backend
-│   ├── routes
-│   ├── services
-│   ├── rag_pipeline
-│   ├── risk_engine
-│   └── app.py
-│
-├── data
-│   └── documents
-│
-├── embeddings
-│
-├── frontend
-│
-├── docker
-│
-├── requirements.txt
-└── README.md
-```
-
----
-
-# 🔗 API Endpoints
-
-### 📄 Upload Document
-```
-POST /upload-document
-```
-Uploads and processes a document.
-
----
-
-### 🔍 Analyze Compliance Risk
-```
-POST /analyze-risk
-```
-Runs AI analysis and returns compliance insights.
-
----
-
-### 💬 Chat with Documents
-```
-POST /chat
-```
-Ask questions about uploaded documents.
-
----
-
-### 📑 Generate Compliance Report
-```
-POST /generate-report
-```
-Generates a compliance audit report.
-
----
-
-### 📂 List Uploaded Documents
-```
-GET /documents
-```
-Returns uploaded documents.
-
----
-
-# ⚙️ Installation
-
-Clone the repository:
+2. Install backend dependencies:
 
 ```bash
-git clone https://github.com/yourusername/AI-Compliance-Risk-Intelligence-Platform.git
-cd AI-Compliance-Risk-Intelligence-Platform
-```
-
-Create environment:
-
-```bash
-conda create -n compliance_ai python=3.10
-conda activate compliance_ai
-```
-
-Install dependencies:
-
-```bash
+python -m venv .venv
+.venv\\Scripts\\activate
 pip install -r requirements.txt
 ```
 
----
+3. Install frontend dependencies:
 
-# ▶️ Run Backend
+```bash
+cd frontend
+npm install
+```
+
+## Run locally
+
+Open two terminals from the repo root.
+
+1. Start backend:
 
 ```bash
 cd backend
-uvicorn app:app --reload
+..\\.venv\\Scripts\\python -m uvicorn app:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-Open API docs:
+2. Start frontend:
 
+```bash
+cd frontend
+npm run dev -- --host 127.0.0.1 --port 5173
 ```
-http://127.0.0.1:8000/docs
+
+3. Open:
+
+- Frontend: `http://127.0.0.1:5173`
+- Backend docs: `http://127.0.0.1:8000/docs`
+- Health check: `http://127.0.0.1:8000/health`
+
+Note: the frontend uses a Vite proxy (`/api -> http://127.0.0.1:8000`).
+
+## API endpoints
+
+- `GET /` - root status
+- `GET /health` - health check
+- `POST /upload-document` - upload a PDF and index it
+- `POST /analyze-risk` - run risk/compliance analysis
+- `POST /chat` - ask questions against indexed document context
+- `POST /generate-report` - create report PDF (`reports/compliance_report.pdf`)
+- `GET /documents` - list indexed documents
+- `DELETE /documents/{document_name}` - remove a document from index and storage
+
+## Example requests
+
+Upload a document:
+
+```bash
+curl -X POST "http://127.0.0.1:8000/upload-document" \
+  -H "accept: application/json" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@backend/data/documents/sample.pdf"
 ```
 
----
+Analyze risk:
 
-# 🔮 Future Improvements
+```bash
+curl -X POST "http://127.0.0.1:8000/analyze-risk" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"Analyze this document for GDPR and security risks"}'
+```
 
-- 📊 Compliance risk heatmap
-- 📁 Document preview viewer
-- 📉 Risk analytics dashboard
-- 🧠 Explainable AI reasoning
-- ☁️ Cloud deployment
-- 🔐 Enterprise authentication
+Chat with documents:
 
----
+```bash
+curl -X POST "http://127.0.0.1:8000/chat" \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What are the high-risk findings?","history":[]}'
+```
 
-# 🎯 Use Cases
+Generate report:
 
-This platform can be used by:
+```bash
+curl -X POST "http://127.0.0.1:8000/generate-report" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"Create an executive compliance summary"}'
+```
 
-- 🏢 Compliance teams  
-- ⚖️ Legal departments  
-- 🔐 Security auditors  
-- 📊 Risk advisory firms  
-- 🏛 Enterprise governance teams  
+## Notes
 
----
+- Only PDF uploads are supported.
+- FAISS index and chunk metadata are persisted under `backend/embeddings/`.
+- Generated reports are stored in `backend/reports/` and served through `/reports`.
+- The code includes non-essential legacy dependencies in `requirements.txt` that can be trimmed later.
 
-# 👨‍💻 Author
+## License
 
-**Viraj Agrawal**
-
-AI / Machine Learning Engineer  
-Focus: Enterprise AI Systems, NLP, and RAG Architectures
-
----
-
-# 📜 License
-
-MIT License
+MIT

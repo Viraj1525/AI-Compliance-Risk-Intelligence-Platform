@@ -1,14 +1,14 @@
 from rag_pipeline.embeddings import model
 from rag_pipeline.retriever import retrieve
-from risk_engine.compliance_checker import analyze_compliance
+from risk_engine.compliance_checker import answer_question
 
 from services import document_service
 
 
-def chat_with_documents(question):
+def chat_with_documents(question, history=None):
 
     if document_service.VECTOR_INDEX is None:
-        return "No documents uploaded."
+        return 'No documents uploaded.'
 
     query_embedding = model.encode([question])[0]
 
@@ -19,8 +19,16 @@ def chat_with_documents(question):
         k=3
     )
 
-    context = "\n".join([doc.page_content for doc in results])
+    if not results:
+        return 'No relevant context found in uploaded documents.'
 
-    answer = analyze_compliance(context + "\n\nQuestion: " + question)
+    context_parts = []
+    for doc in results:
+        source = doc.metadata.get('source', 'unknown')
+        context_parts.append(f"Document: {source}\n{doc.page_content}")
+
+    context = '\n\n'.join(context_parts)
+
+    answer = answer_question(context, question=question, history=history)
 
     return answer

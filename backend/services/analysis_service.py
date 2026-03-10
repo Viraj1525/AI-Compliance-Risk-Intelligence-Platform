@@ -8,45 +8,40 @@ from services import document_service
 
 def run_analysis(query):
 
-    # Check if documents exist
     if document_service.VECTOR_INDEX is None:
         return {
-            "analysis": "No documents uploaded yet.",
-            "compliance_score": 0
+            'analysis': 'No documents uploaded yet.',
+            'compliance_score': 0
         }
 
-    # Convert query to embedding
     query_embedding = model.encode([query])[0]
 
-    # Retrieve relevant chunks
     results = retrieve(
         query_embedding,
         document_service.VECTOR_INDEX,
         document_service.DOCUMENT_CHUNKS
     )
 
-    # Build context with document sources
+    if not results:
+        return {
+            'analysis': 'No relevant document context found for this query.',
+            'compliance_score': 0
+        }
+
     context_parts = []
 
     for doc in results:
-
-        source = doc.metadata.get("source", "unknown")
-
+        source = doc.metadata.get('source', 'unknown')
         text = doc.page_content
+        context_parts.append(f'Document: {source}\n{text}')
 
-        context_parts.append(
-            f"Document: {source}\n{text}"
-        )
+    context = '\n\n'.join(context_parts)
 
-    context = "\n\n".join(context_parts)
+    analysis = analyze_compliance(context, question=query)
 
-    # Run LLM analysis
-    analysis = analyze_compliance(context)
-
-    # Calculate compliance score
     score = calculate_compliance_score(analysis)
 
     return {
-        "analysis": analysis,
-        "compliance_score": score
+        'analysis': analysis,
+        'compliance_score': score
     }
