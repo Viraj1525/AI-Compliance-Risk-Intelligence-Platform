@@ -1,72 +1,131 @@
-# AI Compliance and Risk Intelligence Platform
+# 🛡️ AI Compliance & Risk Intelligence Platform
 
-AI-assisted platform for uploading enterprise PDF documents, indexing them with a local RAG pipeline, and generating compliance analysis, chat answers, and downloadable reports.
+> An AI-powered platform for enterprise document compliance analysis — upload PDFs, index them with a local RAG pipeline, and get intelligent compliance insights, risk analysis, and downloadable reports.
 
-## What It Does
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18+-61DAFB?style=flat-square&logo=react&logoColor=black)
+![LangChain](https://img.shields.io/badge/LangChain-RAG-1C3C3C?style=flat-square)
+![Groq](https://img.shields.io/badge/LLM-Groq-F55036?style=flat-square)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)
 
-- Upload one PDF or multiple PDFs in a single batch
-- Analyze all uploaded PDFs together in one shared session
-- Ask questions across indexed documents
-- Generate a compliance report PDF
-- Remove indexed documents from the current session
-- Reset old uploads automatically when the backend restarts or a new upload batch begins
+---
 
-## Tech Stack
+## 📋 Table of Contents
 
-- Backend: FastAPI, Uvicorn, Python
-- Frontend: React, Vite, Axios
-- Retrieval: LangChain, sentence-transformers, FAISS
-- LLM: Groq with local heuristic fallbacks where supported
-- Reporting: ReportLab
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
+- [Local Setup](#-local-setup)
+- [Environment Variables](#-environment-variables)
+- [Running the App](#-running-the-app)
+- [Using the App](#-using-the-app)
+- [API Reference](#-api-reference)
+- [Example API Calls](#-example-api-calls)
+- [Storage Behavior](#-storage-behavior)
+- [Use Cases](#-use-cases)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+- [Author](#-author)
+- [License](#-license)
 
-## Project Structure
+---
 
-```text
+## 🔍 Overview
+
+The **AI Compliance & Risk Intelligence Platform** is a full-stack application that enables enterprise teams to analyze legal, regulatory, and policy documents using AI. Simply upload one or more PDF documents, and the platform indexes them into a local RAG (Retrieval-Augmented Generation) pipeline. You can then query your documents for compliance gaps, ask natural-language questions, and generate professional compliance reports — all in one workflow.
+
+Built with a **FastAPI** backend, a **React + Vite** frontend, **LangChain** for retrieval orchestration, **FAISS** for vector search, and **Groq** for fast LLM inference.
+
+---
+
+## ✨ Key Features
+
+- 📄 **Batch PDF Upload** — Upload one or multiple PDFs in a single session
+- 🧠 **RAG Pipeline** — Documents are chunked, embedded, and indexed via FAISS for semantic retrieval
+- 🔍 **Compliance Analysis** — Run targeted risk and compliance queries across all indexed documents
+- 💬 **Multi-document Chat** — Ask natural-language questions across your entire document set
+- 📊 **Report Generation** — Download a professional compliance summary as a PDF (via ReportLab)
+- 🗂️ **Session Management** — Add or remove documents; sessions auto-reset on backend restart or new upload batch
+- ⚡ **Groq LLM** — Fast inference with `llama-3.3-70b-versatile`; graceful heuristic fallback when unavailable
+- 🔌 **OpenAPI Docs** — Interactive Swagger UI available at `/docs`
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | FastAPI, Uvicorn, Python 3.10+ |
+| **Frontend** | React 18, Vite, Axios |
+| **RAG / Retrieval** | LangChain, sentence-transformers (`all-MiniLM-L6-v2`), FAISS |
+| **LLM** | Groq API (`llama-3.3-70b-versatile`) |
+| **Report Generation** | ReportLab |
+| **Dev Tooling** | PowerShell scripts, `.cmd` launchers |
+
+---
+
+## 📁 Project Structure
+
+```
 AI-Compliance-Risk-Intelligence-Platform/
-|-- backend/
-|   |-- app.py
-|   |-- config/
-|   |-- data/documents/
-|   |-- rag_pipeline/
-|   |-- risk_engine/
-|   |-- routes/
-|   `-- services/
-|-- frontend/
-|   |-- src/
-|   `-- package.json
-|-- .env.example
-|-- requirements.txt
-|-- start-dev.ps1
-|-- stop-dev.ps1
-|-- backend_run.cmd
-|-- frontend_run.cmd
-`-- README.md
+├── backend/
+│   ├── app.py                  # FastAPI application entry point
+│   ├── config/                 # Configuration & environment loading
+│   ├── data/documents/         # Uploaded PDFs (session-scoped)
+│   ├── rag_pipeline/           # Chunking, embedding, FAISS indexing
+│   ├── risk_engine/            # Compliance & risk heuristics
+│   ├── routes/                 # API route definitions
+│   └── services/               # Business logic & report generation
+├── frontend/
+│   ├── src/                    # React components & pages
+│   └── package.json
+├── .env.example                # Environment variable template
+├── requirements.txt            # Python dependencies
+├── setup_project.py            # Project setup helper
+├── start-dev.ps1               # Windows: start both servers
+├── stop-dev.ps1                # Windows: stop tracked servers
+├── backend_run.cmd             # Quick backend launcher
+├── frontend_run.cmd            # Quick frontend launcher
+└── README.md
 ```
 
-## Requirements
+---
 
-- Python 3.10 or newer
-- Node.js 18 or newer
-- npm
+## ✅ Prerequisites
 
-## Local Setup
+- **Python** 3.10 or newer
+- **Node.js** 18 or newer & **npm**
+- A free **[Groq API key](https://console.groq.com/)** for LLM-powered analysis
 
-1. Clone the repository and open it in your terminal.
+---
+
+## 🚀 Local Setup
+
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Viraj1525/AI-Compliance-Risk-Intelligence-Platform.git
 cd AI-Compliance-Risk-Intelligence-Platform
 ```
 
-2. Create a virtual environment and install backend dependencies.
+### 2. Set Up the Python Environment
 
 ```bash
 python -m venv .venv
+
+# Windows
 .venv\Scripts\activate
+
+# macOS / Linux
+source .venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
-3. Install frontend dependencies.
+### 3. Install Frontend Dependencies
 
 ```bash
 cd frontend
@@ -74,200 +133,230 @@ npm install
 cd ..
 ```
 
-4. Create a `.env` file in the project root. You can copy `.env.example` and adjust values for your machine.
+### 4. Configure Environment Variables
 
-Smallest working example:
-
-```env
-GROQ_API_KEY=your_groq_api_key
+```bash
+cp .env.example .env
 ```
 
-## Environment Variables
-
-Common local variables:
+Open `.env` and set at minimum:
 
 ```env
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+See the full [Environment Variables](#-environment-variables) section below for all options.
+
+---
+
+## ⚙️ Environment Variables
+
+```env
+# ── LLM ──────────────────────────────────────────────────
 GROQ_API_KEY=your_groq_api_key
 GROQ_MODEL_NAME=llama-3.3-70b-versatile
+
+# ── Embeddings ───────────────────────────────────────────
 EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
 EMBEDDING_MODEL_OFFLINE=false
 # EMBEDDING_MODEL_CACHE_DIR=D:\models\sentence-transformers
 
+# ── Backend ──────────────────────────────────────────────
 API_HOST=127.0.0.1
 API_PORT=8000
+
+# ── Frontend / CORS ──────────────────────────────────────
 FRONTEND_DEV_URL=http://127.0.0.1:5173
 ALLOWED_ORIGINS=http://127.0.0.1:5173
 
+# ── Vite Proxy ───────────────────────────────────────────
 VITE_API_BASE_URL=/api
 VITE_API_PROXY_TARGET=http://127.0.0.1:8000
 ```
 
-Notes:
+| Variable | Description |
+|---|---|
+| `GROQ_API_KEY` | Required for LLM analysis & chat. Without it, responses fall back to heuristics. |
+| `EMBEDDING_MODEL_OFFLINE` | Set to `true` to load embeddings from local cache (no internet needed). |
+| `EMBEDDING_MODEL_CACHE_DIR` | Local path to a cached sentence-transformers model. |
+| `VITE_API_PROXY_TARGET` | The backend URL that Vite forwards `/api` requests to in development. |
 
-- `GROQ_API_KEY` enables LLM-powered analysis and chat.
-- If Groq access is unavailable, parts of the app may fall back to heuristic behavior.
-- `EMBEDDING_MODEL_OFFLINE=true` is useful if the embedding model is already cached locally.
-- `VITE_API_PROXY_TARGET` controls where the Vite dev server forwards `/api` requests.
+---
 
-## Run Locally
+## ▶️ Running the App
 
-### Option 1: Start Manually
+### Option 1 — Manual (Cross-Platform)
 
-Open two terminals from the project root.
+Open **two terminals** from the project root:
 
-Backend:
-
+**Terminal 1 — Backend:**
 ```bash
 cd backend
-..\.venv\Scripts\python -m uvicorn app:app --host 127.0.0.1 --port 8000 --reload
+../.venv/Scripts/python -m uvicorn app:app --host 127.0.0.1 --port 8000 --reload
+# macOS/Linux: ../.venv/bin/python -m uvicorn app:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-Frontend:
-
+**Terminal 2 — Frontend:**
 ```bash
 cd frontend
 npm run dev -- --host 127.0.0.1 --port 5173
 ```
 
-### Option 2: Use the Included Windows Scripts
-
-From the project root:
+### Option 2 — PowerShell Scripts (Windows)
 
 ```powershell
+# Start both servers
 powershell -ExecutionPolicy Bypass -File .\start-dev.ps1
-```
 
-This starts the frontend and backend, stores PID files in `.run/`, and writes logs to `logs/`.
-
-To stop tracked processes:
-
-```powershell
+# Stop both servers
 powershell -ExecutionPolicy Bypass -File .\stop-dev.ps1
 ```
 
-## Open in Browser
+The `start-dev.ps1` script manages PIDs (stored in `.run/`) and routes logs to `logs/`.
 
-- Frontend: `http://127.0.0.1:5173`
-- Backend docs: `http://127.0.0.1:8000/docs`
-- Health check: `http://127.0.0.1:8000/health`
+### Access Points
 
-The frontend uses a Vite proxy, so browser requests to `/api` are forwarded to the backend.
+| Service | URL |
+|---|---|
+| Frontend App | http://127.0.0.1:5173 |
+| Backend API | http://127.0.0.1:8000 |
+| Swagger Docs | http://127.0.0.1:8000/docs |
+| Health Check | http://127.0.0.1:8000/health |
 
-## How to Use the App
+---
 
-1. Open the upload page.
-2. Upload one PDF or multiple PDFs together.
-3. Wait until indexing is complete.
-4. Go to Analyze to run compliance or risk queries.
-5. Use Chat to ask document-specific questions.
-6. Use Report to generate the compliance report.
+## 🖥️ Using the App
 
-Important behavior:
+1. **Upload** — Go to the upload page and select one or more PDFs. All files in the batch are indexed together into a shared session.
+2. **Analyze** — Navigate to the Analyze tab and run compliance or risk queries (e.g., *"Identify GDPR violations"* or *"Summarize data retention risks"*).
+3. **Chat** — Use the Chat interface to ask free-form questions across all indexed documents.
+4. **Report** — Generate and download a professional PDF compliance report.
+5. **Manage** — View indexed documents and remove individual files from the session.
 
-- A new upload batch clears the previous analysis session.
-- All PDFs uploaded in the same batch are analyzed together.
-- Restarting the backend also clears old temporary files and indexed session data.
+> **Note:** Uploading a new batch clears the previous session. Restarting the backend also clears temporary files and index data.
 
-## API Endpoints
+---
 
-- `GET /` - root status
-- `GET /health` - backend health check
-- `POST /upload-document` - upload one PDF
-- `POST /upload-documents` - upload multiple PDFs in one batch
-- `POST /analyze-risk` - run compliance or risk analysis
-- `POST /chat` - ask questions across indexed documents
-- `POST /generate-report` - generate a report PDF
-- `GET /documents` - list indexed documents in the current session
-- `DELETE /documents/{document_name}` - delete one indexed document
+## 📡 API Reference
 
-## Example API Calls
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/` | Root status check |
+| `GET` | `/health` | Backend health check |
+| `POST` | `/upload-document` | Upload a single PDF |
+| `POST` | `/upload-documents` | Upload multiple PDFs in one batch |
+| `POST` | `/analyze-risk` | Run compliance or risk analysis |
+| `POST` | `/chat` | Ask questions across indexed documents |
+| `POST` | `/generate-report` | Generate a downloadable compliance PDF |
+| `GET` | `/documents` | List documents indexed in the current session |
+| `DELETE` | `/documents/{document_name}` | Remove a specific document from the session |
 
-Upload one document:
+Full interactive documentation is available at **[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**.
 
+---
+
+## 🔧 Example API Calls
+
+**Upload a single document:**
 ```bash
 curl -X POST "http://127.0.0.1:8000/upload-document" \
-  -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -F "file=@sample.pdf"
 ```
 
-Upload multiple documents:
-
+**Upload multiple documents:**
 ```bash
 curl -X POST "http://127.0.0.1:8000/upload-documents" \
-  -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -F "files=@policy.pdf" \
   -F "files=@contract.pdf"
 ```
 
-Analyze risk:
-
+**Run a compliance analysis:**
 ```bash
 curl -X POST "http://127.0.0.1:8000/analyze-risk" \
   -H "Content-Type: application/json" \
-  -d "{\"query\":\"Analyze these documents for GDPR and security risks\"}"
+  -d '{"query": "Analyze these documents for GDPR and data security risks"}'
 ```
 
-Generate report:
+**Ask a question via chat:**
+```bash
+curl -X POST "http://127.0.0.1:8000/chat" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What are the key data retention obligations mentioned?"}'
+```
 
+**Generate a compliance report:**
 ```bash
 curl -X POST "http://127.0.0.1:8000/generate-report" \
   -H "Content-Type: application/json" \
-  -d "{\"query\":\"Create an executive compliance summary\"}"
+  -d '{"query": "Create an executive compliance summary"}'
 ```
 
-## Local Storage Behavior
+---
 
-This project uses temporary session-style storage for local runs:
+## 💾 Storage Behavior
 
-- Uploaded files are stored in `backend/data/documents/`
-- Embeddings and chunk metadata are stored in backend-managed local storage during the session
-- Generated reports are stored in `backend/reports/`
+This project uses lightweight session-scoped local storage:
 
-These are cleared when:
+| Location | Contents |
+|---|---|
+| `backend/data/documents/` | Uploaded PDFs for the current session |
+| `backend/reports/` | Generated compliance report PDFs |
+| In-memory / local FAISS | Embeddings and chunk metadata for the active session |
 
-- the backend starts
-- a new upload batch is submitted
+**Auto-cleared when:**
+- The backend server restarts
+- A new upload batch is submitted
 
-This prevents old documents from affecting a new analysis session.
+This design ensures a clean slate for every new analysis session without requiring a database.
 
-## Troubleshooting
+---
 
-- If the frontend opens but API calls fail, make sure the backend is running on port `8000`.
-- If uploads work but analysis quality is weak, check whether `GROQ_API_KEY` is set.
-- If model loading is slow on first run, that is usually the embedding model initializing.
-- If you want to avoid network access for embeddings, cache the model locally and set `EMBEDDING_MODEL_OFFLINE=true`.
+## 🏢 Use Cases
 
-## Use Cases
+- **Enterprise compliance review** — Audit internal policies against regulatory frameworks (GDPR, HIPAA, SOC 2)
+- **Legal document analysis** — Surface risk clauses and obligations in contracts
+- **Data privacy verification** — Check privacy policies for gaps or non-compliance
+- **Internal governance monitoring** — Evaluate governance documents against company standards
+- **Risk management automation** — Automate first-pass risk triage across large document sets
 
-- Enterprise compliance review
-- Legal document analysis
-- Data privacy policy verification
-- Internal governance monitoring
-- Risk management automation
+---
 
-## Author
+## 🔎 Troubleshooting
 
-**Viraj Agrawal**
+| Issue | Solution |
+|---|---|
+| Frontend loads but API calls fail | Ensure the backend is running on port `8000` |
+| Analysis returns weak or generic results | Verify `GROQ_API_KEY` is correctly set in `.env` |
+| Slow startup on first run | Normal — the embedding model (`all-MiniLM-L6-v2`) initializes on first load |
+| Want offline embeddings | Cache the model locally and set `EMBEDDING_MODEL_OFFLINE=true` |
+| PowerShell script blocked | Run with `-ExecutionPolicy Bypass` flag |
 
-AI Developer focused on:
+---
 
-- Generative AI
-- Retrieval-Augmented Generation (RAG)
-- AI-powered enterprise applications
+## 🤝 Contributing
 
-GitHub:
-https://github.com/Viraj1525
-
-## Contributing
-
-Contributions are welcome.
+Contributions are welcome! To get started:
 
 1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m "feat: add your feature"`
+4. Push to your branch: `git push origin feature/your-feature-name`
+5. Open a Pull Request
 
-## License
+Please keep PRs focused and include a brief description of what changed and why.
 
-This project is licensed under the MIT License.
+---
+
+## 👤 Author
+
+**Viraj Agrawal** — AI Developer focused on Generative AI, Retrieval-Augmented Generation (RAG), and AI-powered enterprise applications.
+
+- GitHub: [@Viraj1525](https://github.com/Viraj1525)
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
